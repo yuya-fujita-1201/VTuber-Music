@@ -1,44 +1,139 @@
-import { ScrollView, Text, View, TouchableOpacity } from "react-native";
-
+import { ScrollView, Text, View, TouchableOpacity, Image, FlatList } from "react-native";
+import { useEffect, useState } from "react";
 import { ScreenContainer } from "@/components/screen-container";
+import { trpc } from "@/lib/trpc";
 
-/**
- * Home Screen - NativeWind Example
- *
- * This template uses NativeWind (Tailwind CSS for React Native).
- * You can use familiar Tailwind classes directly in className props.
- *
- * Key patterns:
- * - Use `className` instead of `style` for most styling
- * - Theme colors: use tokens directly (bg-background, text-foreground, bg-primary, etc.); no dark: prefix needed
- * - Responsive: standard Tailwind breakpoints work on web
- * - Custom colors defined in tailwind.config.js
- */
+type Song = {
+  id: number;
+  title: string;
+  vtuberName: string | null;
+  thumbnailUrl: string | null;
+  duration: number;
+  genre: string;
+  viewCount: number;
+};
+
 export default function HomeScreen() {
+  const { data: recentSongs, isLoading } = trpc.songs.list.useQuery({ limit: 20 });
+  const { data: coverSongs } = trpc.songs.byGenre.useQuery({ genre: "cover", limit: 10 });
+  const { data: originalSongs } = trpc.songs.byGenre.useQuery({ genre: "original", limit: 10 });
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const formatViewCount = (count: number) => {
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`;
+    } else if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
+  };
+
+  const renderSongCard = (song: Song) => (
+    <TouchableOpacity
+      key={song.id}
+      className="w-40 mr-4"
+      activeOpacity={0.7}
+    >
+      <View className="bg-surface rounded-lg overflow-hidden shadow-sm">
+        <Image
+          source={{ uri: song.thumbnailUrl || "https://via.placeholder.com/160" }}
+          className="w-full h-40"
+          resizeMode="cover"
+        />
+        <View className="p-3">
+          <Text className="text-sm font-semibold text-foreground" numberOfLines={2}>
+            {song.title}
+          </Text>
+          <Text className="text-xs text-muted mt-1" numberOfLines={1}>
+            {song.vtuberName}
+          </Text>
+          <View className="flex-row items-center justify-between mt-2">
+            <Text className="text-xs text-muted">
+              {formatViewCount(song.viewCount)}回
+            </Text>
+            <Text className="text-xs text-muted">
+              {formatDuration(song.duration)}
+            </Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
-    <ScreenContainer className="p-6">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="flex-1 gap-8">
-          {/* Hero Section */}
-          <View className="items-center gap-2">
-            <Text className="text-4xl font-bold text-foreground">Welcome</Text>
-            <Text className="text-base text-muted text-center">
-              Edit app/(tabs)/index.tsx to get started
-            </Text>
-          </View>
+    <ScreenContainer>
+      <ScrollView className="flex-1">
+        {/* Header */}
+        <View className="px-6 pt-6 pb-4">
+          <Text className="text-3xl font-bold text-foreground">ホーム</Text>
+          <Text className="text-sm text-muted mt-1">VTuber楽曲を探す</Text>
+        </View>
 
-          {/* Example Card */}
-          <View className="w-full max-w-sm self-center bg-surface rounded-2xl p-6 shadow-sm border border-border">
-            <Text className="text-lg font-semibold text-foreground mb-2">NativeWind Ready</Text>
-            <Text className="text-sm text-muted leading-relaxed">
-              Use Tailwind CSS classes directly in your React Native components.
-            </Text>
+        {/* Recent Songs Section */}
+        <View className="mb-6">
+          <View className="px-6 mb-3 flex-row items-center justify-between">
+            <Text className="text-xl font-bold text-foreground">最近追加された楽曲</Text>
           </View>
+          {isLoading ? (
+            <View className="px-6">
+              <Text className="text-muted">読み込み中...</Text>
+            </View>
+          ) : (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 24 }}
+            >
+              {recentSongs?.map(renderSongCard)}
+            </ScrollView>
+          )}
+        </View>
 
-          {/* Example Button */}
-          <View className="items-center">
-            <TouchableOpacity className="bg-primary px-6 py-3 rounded-full active:opacity-80">
-              <Text className="text-background font-semibold">Get Started</Text>
+        {/* Cover Songs Section */}
+        <View className="mb-6">
+          <View className="px-6 mb-3 flex-row items-center justify-between">
+            <Text className="text-xl font-bold text-foreground">カバー曲</Text>
+          </View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 24 }}
+          >
+            {coverSongs?.map(renderSongCard)}
+          </ScrollView>
+        </View>
+
+        {/* Original Songs Section */}
+        <View className="mb-6">
+          <View className="px-6 mb-3 flex-row items-center justify-between">
+            <Text className="text-xl font-bold text-foreground">オリジナル曲</Text>
+          </View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 24 }}
+          >
+            {originalSongs?.map(renderSongCard)}
+          </ScrollView>
+        </View>
+
+        {/* Genre Quick Access */}
+        <View className="px-6 mb-8">
+          <Text className="text-xl font-bold text-foreground mb-3">ジャンルから探す</Text>
+          <View className="flex-row flex-wrap gap-3">
+            <TouchableOpacity className="bg-primary px-5 py-3 rounded-full">
+              <Text className="text-background font-semibold">カバー曲</Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="bg-surface px-5 py-3 rounded-full border border-border">
+              <Text className="text-foreground font-semibold">オリジナル曲</Text>
+            </TouchableOpacity>
+            <TouchableOpacity className="bg-surface px-5 py-3 rounded-full border border-border">
+              <Text className="text-foreground font-semibold">歌枠</Text>
             </TouchableOpacity>
           </View>
         </View>
