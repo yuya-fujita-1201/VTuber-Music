@@ -11,6 +11,7 @@ import { useState } from "react";
 import { ScreenContainer } from "@/components/screen-container";
 import { trpc } from "@/lib/trpc";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { router } from "expo-router";
 
 type Song = {
   id: number;
@@ -71,6 +72,7 @@ export default function SearchScreen() {
     <TouchableOpacity
       className="flex-row bg-surface rounded-lg p-3 mb-3 shadow-sm"
       activeOpacity={0.7}
+      onPress={() => router.push(`/song/${item.id}`)}
     >
       <Image
         source={{ uri: item.thumbnailUrl || "https://via.placeholder.com/80" }}

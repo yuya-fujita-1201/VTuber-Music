@@ -12,6 +12,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { trpc } from "@/lib/trpc";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useAuth } from "@/hooks/use-auth";
+import { router } from "expo-router";
 
 type Song = {
   id: number | null;
@@ -63,6 +64,7 @@ export default function LibraryScreen() {
     <TouchableOpacity
       className="flex-row bg-surface rounded-lg p-3 mb-3 shadow-sm"
       activeOpacity={0.7}
+      onPress={() => item.id && router.push(`/song/${item.id}`)}
     >
       <Image
         source={{ uri: item.thumbnailUrl || "https://via.placeholder.com/80" }}
