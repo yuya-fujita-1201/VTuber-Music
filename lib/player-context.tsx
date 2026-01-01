@@ -70,14 +70,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         soundRef.current = null;
       }
 
-      // Note: YouTube audio cannot be directly played via Audio.Sound
-      // For now, we'll simulate playback with the song metadata
-      // In a full implementation, you would:
-      // 1. Use expo-video to play YouTube videos
-      // 2. Or use a backend service to extract audio URLs
-      // 3. Or integrate with YouTube IFrame API
-      
-      // For demo purposes, we'll just update the state without actual audio
+      // Update state with the new song
+      // The YouTube player in the mini player will handle actual playback
       soundRef.current = null;
 
       setState((prev) => ({

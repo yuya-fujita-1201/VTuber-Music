@@ -3,10 +3,13 @@ import { usePlayer } from "@/lib/player-context";
 import { IconSymbol } from "./ui/icon-symbol";
 import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { YouTubePlayer } from "./youtube-player";
+import { useState } from "react";
 
 export function MiniPlayer() {
   const { state, pause, resume, playNext } = usePlayer();
   const insets = useSafeAreaInsets();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   if (!state.currentSong) {
     return null;
@@ -24,6 +27,10 @@ export function MiniPlayer() {
   };
 
   const handleOpenDetail = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleNavigateToDetail = () => {
     if (state.currentSong) {
       router.push(`/song/${state.currentSong.id}`);
     }
@@ -34,6 +41,19 @@ export function MiniPlayer() {
       className="absolute left-0 right-0 bg-surface border-t border-border"
       style={{ bottom: tabBarHeight }}
     >
+      {/* Expanded YouTube Player */}
+      {isExpanded && state.currentSong && (
+        <View className="p-4">
+          <YouTubePlayer videoUrl={state.currentSong.videoUrl} />
+          <TouchableOpacity
+            className="mt-2 py-2 px-4 bg-primary rounded-lg"
+            onPress={handleNavigateToDetail}
+          >
+            <Text className="text-center text-background font-semibold">詳細を見る</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <TouchableOpacity
         className="flex-row items-center px-4 py-3"
         activeOpacity={0.8}
