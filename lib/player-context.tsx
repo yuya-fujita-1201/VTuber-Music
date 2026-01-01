@@ -72,9 +72,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
       // Note: For demo purposes, we're using a placeholder audio URL
       // In production, you would use the actual audio URL from the song
+      // Using a reliable demo audio file from archive.org
       const { sound } = await Audio.Sound.createAsync(
-        // Using a demo audio file - replace with actual song.videoUrl in production
-        { uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+        { uri: "https://archive.org/download/IGM-V7/IGM%20-%20Vol.%207/25%20Diablo%20Swing%20Orchestra%20-%20Heroines.mp3" },
         { shouldPlay: true },
         (status: AVPlaybackStatus) => {
           if (status.isLoaded) {

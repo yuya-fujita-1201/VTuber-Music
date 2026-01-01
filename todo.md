@@ -70,3 +70,13 @@
 - [x] シークバー実装
 - [x] 関連楽曲表示機能
 - [x] 各画面から楽曲詳細画面への遷移実装
+
+## エラー修正とYouTube API統合（新規・緊急）
+- [x] 音声再生エラーの修正（AVPlayerItem error -1001）
+- [x] デモ音声URLを有効なものに変更
+- [x] YouTube Data API統合の設計
+- [x] YouTube APIキーの設定
+- [x] YouTube動画検索機能の実装
+- [x] YouTubeデータからSongデータへの変換
+- [x] サムネイル画像の取得
+- [x] 実際のYouTubeデータでシードスクリプトを更新
