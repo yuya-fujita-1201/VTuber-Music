@@ -12,6 +12,7 @@ import { trpc } from "@/lib/trpc";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { usePlayer } from "@/lib/player-context";
 import { useAuth } from "@/hooks/use-auth";
+import { YouTubePlayer } from "@/components/youtube-player";
 
 export default function SongDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -124,7 +125,13 @@ export default function SongDetailScreen() {
           <Text className="text-lg font-semibold text-foreground">楽曲詳細</Text>
         </View>
 
-        {/* Song Cover */}
+        {/* YouTube Player */}
+        <View className="px-6 pt-4 pb-6">
+          <YouTubePlayer videoUrl={song.videoUrl} className="w-full" />
+        </View>
+
+        {/* Song Cover (Fallback) */}
+        {/* Uncomment if you want to show thumbnail as fallback
         <View className="px-6 pt-4 pb-6 items-center">
           <Image
             source={{ uri: song.thumbnailUrl || "https://via.placeholder.com/300" }}
@@ -132,6 +139,7 @@ export default function SongDetailScreen() {
             resizeMode="cover"
           />
         </View>
+        */}
 
         {/* Song Info */}
         <View className="px-6 pb-4">
