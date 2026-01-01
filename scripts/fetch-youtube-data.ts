@@ -21,6 +21,12 @@ const VTUBER_QUERIES = [
   "天音かなた 歌ってみた",
   "雪花ラミィ 歌ってみた",
   "桃鈴ねね 歌ってみた",
+  // Original songs
+  "星街すいせい オリジナル",
+  "宝鐘マリン オリジナル",
+  "湊あくあ オリジナル",
+  "星街すいせい MV",
+  "宝鐘マリン MV",
 ];
 
 async function main() {
@@ -33,7 +39,7 @@ async function main() {
   }
 
   for (const query of VTUBER_QUERIES) {
-    console.log(`Searching for: ${query}`);
+    console.log(`\nSearching for: ${query}`);
     
     try {
       const videos = await searchVTuberSongs(query, 10);
@@ -88,16 +94,29 @@ async function main() {
         }
 
         // Determine genre based on title keywords
-        let genre = "pop";
         const titleLower = video.title.toLowerCase();
-        if (titleLower.includes("rock") || titleLower.includes("ロック")) {
-          genre = "rock";
-        } else if (titleLower.includes("jazz") || titleLower.includes("ジャズ")) {
-          genre = "jazz";
-        } else if (titleLower.includes("ballad") || titleLower.includes("バラード")) {
-          genre = "ballad";
-        } else if (titleLower.includes("anime") || titleLower.includes("アニメ")) {
-          genre = "anime";
+        let genre = "pop";
+        
+        // Check if it's a cover song
+        const isCover = titleLower.includes("cover") ||
+          titleLower.includes("歌ってみた") ||
+          titleLower.includes("カバー") ||
+          titleLower.includes("歌枚") ||
+          titleLower.includes("singing");
+        
+        // Check if it's an original song
+        const isOriginal = titleLower.includes("original") ||
+          titleLower.includes("オリジナル") ||
+          titleLower.includes("mv") ||
+          titleLower.includes("music video") ||
+          (titleLower.includes("/") && titleLower.includes(vtuber.name.toLowerCase()));
+        
+        if (isCover) {
+          genre = "cover";
+        } else if (isOriginal) {
+          genre = "original";
+        } else if (titleLower.includes("歌枚") || titleLower.includes("singing stream")) {
+          genre = "singing_stream";
         }
 
         // Extract original song name if it's a cover

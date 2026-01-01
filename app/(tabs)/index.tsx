@@ -34,9 +34,9 @@ export default function HomeScreen() {
     return count.toString();
   };
 
-  const renderSongCard = (song: Song) => (
+  const renderSongCard = (song: Song, index: number) => (
     <TouchableOpacity
-      key={song.id}
+      key={`song-${song.id}-${index}`}
       className="w-40 mr-4"
       activeOpacity={0.7}
       onPress={() => router.push(`/song/${song.id}`)}
@@ -91,7 +91,7 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingHorizontal: 24 }}
             >
-              {recentSongs?.map(renderSongCard)}
+              {recentSongs?.map((song, index) => renderSongCard(song, index))}
             </ScrollView>
           )}
         </View>
@@ -106,7 +106,7 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: 24 }}
           >
-            {coverSongs?.map(renderSongCard)}
+            {coverSongs?.map((song, index) => renderSongCard(song, index))}
           </ScrollView>
         </View>
 
@@ -120,7 +120,7 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: 24 }}
           >
-            {originalSongs?.map(renderSongCard)}
+            {originalSongs?.map((song, index) => renderSongCard(song, index))}
           </ScrollView>
         </View>
 

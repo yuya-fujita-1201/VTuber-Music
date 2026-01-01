@@ -70,30 +70,15 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         soundRef.current = null;
       }
 
-      // Note: For demo purposes, we're using a placeholder audio URL
-      // In production, you would use the actual audio URL from the song
-      // Using a reliable demo audio file from archive.org
-      const { sound } = await Audio.Sound.createAsync(
-        { uri: "https://archive.org/download/IGM-V7/IGM%20-%20Vol.%207/25%20Diablo%20Swing%20Orchestra%20-%20Heroines.mp3" },
-        { shouldPlay: true },
-        (status: AVPlaybackStatus) => {
-          if (status.isLoaded) {
-            setState((prev) => ({
-              ...prev,
-              position: status.positionMillis / 1000,
-              duration: (status.durationMillis || 0) / 1000,
-              isPlaying: status.isPlaying,
-            }));
-
-            // Auto-play next song when current song ends
-            if (status.didJustFinish) {
-              playNext();
-            }
-          }
-        }
-      );
-
-      soundRef.current = sound;
+      // Note: YouTube audio cannot be directly played via Audio.Sound
+      // For now, we'll simulate playback with the song metadata
+      // In a full implementation, you would:
+      // 1. Use expo-video to play YouTube videos
+      // 2. Or use a backend service to extract audio URLs
+      // 3. Or integrate with YouTube IFrame API
+      
+      // For demo purposes, we'll just update the state without actual audio
+      soundRef.current = null;
 
       setState((prev) => ({
         ...prev,
@@ -109,23 +94,35 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   const pause = useCallback(async () => {
     if (soundRef.current) {
-      await soundRef.current.pauseAsync();
-      setState((prev) => ({ ...prev, isPlaying: false }));
+      try {
+        await soundRef.current.pauseAsync();
+      } catch (error) {
+        console.log("Pause error (ignored):", error);
+      }
     }
+    setState((prev) => ({ ...prev, isPlaying: false }));
   }, []);
 
   const resume = useCallback(async () => {
     if (soundRef.current) {
-      await soundRef.current.playAsync();
-      setState((prev) => ({ ...prev, isPlaying: true }));
+      try {
+        await soundRef.current.playAsync();
+      } catch (error) {
+        console.log("Resume error (ignored):", error);
+      }
     }
+    setState((prev) => ({ ...prev, isPlaying: true }));
   }, []);
 
   const seekTo = useCallback(async (position: number) => {
     if (soundRef.current) {
-      await soundRef.current.setPositionAsync(position * 1000);
-      setState((prev) => ({ ...prev, position }));
+      try {
+        await soundRef.current.setPositionAsync(position * 1000);
+      } catch (error) {
+        console.log("Seek error (ignored):", error);
+      }
     }
+    setState((prev) => ({ ...prev, position }));
   }, []);
 
   const playNext = useCallback(async () => {

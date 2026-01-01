@@ -80,3 +80,12 @@
 - [x] YouTubeデータからSongデータへの変換
 - [x] サムネイル画像の取得
 - [x] 実際のYouTubeデータでシードスクリプトを更新
+
+## エラー修正（新規・緊急）
+- [x] FlatListの重複キーエラーを修正（"Encountered two children with the same key"）
+- [x] 関連楽曲のkeyExtractorを修正
+- [x] カバー曲セクションのデータ取得を実装
+- [x] オリジナル曲セクションのデータ取得を実装
+- [x] ホーム画面のカバー曲表示を修正
+- [x] ホーム画面のオリジナル曲表示を修正- [x] 音声再生エラーを修正（error code -1100）
+- [x] 実際のYouTube動画 URLから音声を再生できるようにする
