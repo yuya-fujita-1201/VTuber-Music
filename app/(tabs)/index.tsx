@@ -2,6 +2,7 @@ import { ScrollView, Text, View, TouchableOpacity, Image, FlatList } from "react
 import { useEffect, useState } from "react";
 import { ScreenContainer } from "@/components/screen-container";
 import { trpc } from "@/lib/trpc";
+import { router } from "expo-router";
 
 type Song = {
   id: number;
@@ -38,6 +39,7 @@ export default function HomeScreen() {
       key={song.id}
       className="w-40 mr-4"
       activeOpacity={0.7}
+      onPress={() => router.push(`/song/${song.id}`)}
     >
       <View className="bg-surface rounded-lg overflow-hidden shadow-sm">
         <Image

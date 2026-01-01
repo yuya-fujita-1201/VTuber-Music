@@ -18,6 +18,22 @@ const MAPPING = {
   "paperplane.fill": "send",
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
+  "chevron.left": "chevron-left",
+  "magnifyingglass": "search",
+  "music.note.list": "queue-music",
+  "heart.fill": "favorite",
+  "heart": "favorite-border",
+  "music.note": "music-note",
+  "xmark.circle.fill": "cancel",
+  "person.crop.circle": "account-circle",
+  "plus": "add",
+  "ellipsis": "more-horiz",
+  "clock": "access-time",
+  "play.circle": "play-circle-outline",
+  "play.fill": "play-arrow",
+  "pause.fill": "pause",
+  "forward.fill": "skip-next",
+  "exclamationmark.triangle": "warning",
 } as IconMapping;
 
 /**

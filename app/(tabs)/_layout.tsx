@@ -3,8 +3,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import { useColors } from "@/hooks/use-colors";
+import { MiniPlayer } from "@/components/mini-player";
 
 export default function TabLayout() {
   const colors = useColors();
@@ -13,7 +14,9 @@ export default function TabLayout() {
   const tabBarHeight = 56 + bottomPadding;
 
   return (
-    <Tabs
+    <>
+      <MiniPlayer />
+      <Tabs
       screenOptions={{
         tabBarActiveTintColor: colors.tint,
         headerShown: false,
@@ -57,5 +60,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </>
   );
 }
